@@ -12,17 +12,31 @@ class Map(QMainWindow):
         super().__init__(None)
         uic.loadUi("ui.ui", self)
         self.setCentralWidget(self.label)
-
-        if get_map():
-            self.show_map()
-        else:
-            self.label.setText("ИНВАЛИД РЕКВЕСТ")
+        self.z = 20
+        self.update_map()
 
     def show_map(self):
         if os.path.isfile("map.png"):
             map = QPixmap("map.png")
             self.label.setPixmap(map)
             os.remove("map.png")
+        else:
+            self.label.setText("ИНВАЛИД РЕКВЕСТ")
+
+    def keyPressEvent(self, event):
+        key = str(event.key())
+
+        if key == "16777239":
+            self.update_map(z=-1)
+        elif key == "16777238":
+            self.update_map(z=1)
+
+    def update_map(self, z=0):
+        if 0 <= self.z + z <= 21:
+            self.z += z
+
+        if get_map(self.z):
+            self.show_map()
         else:
             self.label.setText("ИНВАЛИД РЕКВЕСТ")
 
