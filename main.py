@@ -1,3 +1,4 @@
+import os
 import sys
 
 from request import get_map
@@ -11,12 +12,19 @@ class Map(QMainWindow):
         super().__init__(None)
         uic.loadUi("ui.ui", self)
         self.setCentralWidget(self.label)
-        get_map()
-        self.show_map()
+
+        if get_map():
+            self.show_map()
+        else:
+            self.label.setText("ИНВАЛИД РЕКВЕСТ")
 
     def show_map(self):
-        map = QPixmap("map.png")
-        self.label.setPixmap(map)
+        if os.path.isfile("map.png"):
+            map = QPixmap("map.png")
+            self.label.setPixmap(map)
+            os.remove("map.png")
+        else:
+            self.label.setText("ИНВАЛИД РЕКВЕСТ")
 
 
 def except_hook(cls, exception, traceback):
