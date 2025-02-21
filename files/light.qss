@@ -1,0 +1,22 @@
+QWidget {
+    background-color: #fcfcf7;
+}
+
+QPushButton {
+    border: 1px solid #293345;
+    background-color: transparent;
+}
+
+QPushButton#light {
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border-right: 0px solid transparent;
+    background-color: #fcfcf7;
+}
+
+QPushButton#dark {
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-left: 0px solid transparent;
+    background-color: #293345;
+}

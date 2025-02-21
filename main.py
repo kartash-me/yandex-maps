@@ -4,20 +4,40 @@ import sys
 from request import get_map
 
 from PyQt6 import uic
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
 
 class Map(QMainWindow):
     def __init__(self):
         super().__init__(None)
-        self.label = None
-        uic.loadUi("ui.ui", self)
-        self.setCentralWidget(self.label)
         self.longitude = 37.620070
         self.latitude = 55.753630
         self.z = 20
+        self.theme = "light"
+
+        with open("files/light.qss") as light, open("files/dark.qss") as dark:
+            self.qss = {"light": light.read(), "dark": dark.read()}
+
+        self.initUI()
         self.update_map()
+
+    def initUI(self):
+        uic.loadUi("files/ui.ui", self)
+        self.setStyleSheet(self.qss.get(self.theme))
+        self.setWindowTitle("Yandex Maps API")
+        self.setFixedSize(800, 450)
+
+        self.light.setIcon(QIcon("files/light.png"))
+        self.light.setIconSize(QSize(50, 50))
+        self.light.clicked.connect(self.change_theme)
+        self.light.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+
+        self.dark.setIcon(QIcon("files/dark.png"))
+        self.dark.setIconSize(QSize(45, 45))
+        self.dark.clicked.connect(self.change_theme)
+        self.dark.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
     def show_map(self):
         if os.path.isfile("map.png"):
@@ -51,10 +71,15 @@ class Map(QMainWindow):
         self.update_map()
 
     def update_map(self):
-        if get_map(self.z, self.longitude, self.latitude):
+        if get_map(self.z, self.longitude, self.latitude, self.theme):
             self.show_map()
         else:
             self.label.setText("ИНВАЛИД РЕКВЕСТ")
+
+    def change_theme(self):
+        self.theme = self.sender().objectName()
+        self.setStyleSheet(self.qss.get(self.theme))
+        self.update_map()
 
 
 def except_hook(cls, exception, traceback):
