@@ -36,13 +36,11 @@ def get_map(z, longitude, latitude, theme):
         "z": str(z),
         "theme": theme
     }
-
     response = requests.get(server, params=params)
-    status = "200" in str(response)
 
-    if status:
+    if response.ok:
         im = BytesIO(response.content)
         opened_image = Image.open(im)
         opened_image.save("map.png")
 
-    return status
+    return response.ok

@@ -30,11 +30,11 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
- <widget class="QPushButton" name="light">
+   <widget class="QPushButton" name="light">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>20</y>
+      <y>40</y>
       <width>60</width>
       <height>60</height>
      </rect>
@@ -47,13 +47,34 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>20</y>
+      <y>40</y>
       <width>60</width>
       <height>60</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="theme_label">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>10</y>
+      <width>141</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Тема приложения:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

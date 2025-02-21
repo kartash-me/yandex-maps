@@ -29,15 +29,11 @@ class Map(QMainWindow):
         self.setWindowTitle("Yandex Maps API")
         self.setFixedSize(800, 450)
 
-        self.light.setIcon(QIcon("files/light.png"))
-        self.light.setIconSize(QSize(45, 45))
-        self.light.clicked.connect(self.change_theme)
-        self.light.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-
-        self.dark.setIcon(QIcon("files/dark.png"))
-        self.dark.setIconSize(QSize(45, 45))
-        self.dark.clicked.connect(self.change_theme)
-        self.dark.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        for btn in (self.light, self.dark):
+            btn.setIcon(QIcon(f"files/{btn.objectName()}.png"))
+            btn.setIconSize(QSize(45, 45))
+            btn.clicked.connect(self.change_theme)
+            btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
     def show_map(self):
         if os.path.isfile("map.png"):
