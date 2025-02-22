@@ -3,7 +3,7 @@ import sys
 from request import *
 
 from PyQt6 import uic
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import QSize, Qt, QEvent
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
@@ -30,12 +30,25 @@ class Map(QMainWindow):
         self.setFixedSize(800, 450)
         self.search_button.clicked.connect(self.search_object)
         self.search_req.returnPressed.connect(self.search_object)
+        self.search_req.installEventFilter(self)
 
         for btn in (self.light, self.dark):
             btn.setIcon(QIcon(f"files/{btn.objectName()}.png"))
             btn.setIconSize(QSize(45, 45))
             btn.clicked.connect(self.change_theme)
             btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+
+    def eventFilter(self, source, event):
+        if event.type() == QEvent.Type.KeyPress and source is self.search_req:
+            key = event.key()
+
+            if key in (Qt.Key.Key_Left, Qt.Key.Key_Right,
+                       Qt.Key.Key_Up, Qt.Key.Key_Down,
+                       Qt.Key.Key_PageUp, Qt.Key.Key_PageDown):
+                self.keyPressEvent(event)
+                return True
+
+        return super().eventFilter(source, event)
 
     def search_object(self):
         query = self.search_req.text().strip()
@@ -64,28 +77,23 @@ class Map(QMainWindow):
         else:
             self.label.setText("ИНВАЛИД РЕКВЕСТ")
 
-    def keyPressEvent(self, event, **kwargs):
-        key = str(event.key())
-        # print(f"кнопка: {key}")
+    def keyPressEvent(self, event):
+        key = event.key()
 
-        if key == "16777239": # page down
+        if key == Qt.Key.Key_PageDown:  # page down
             self.z = max(0, min(self.z - 1, 21))
-        elif key == "16777238": # page up
+        elif key == Qt.Key.Key_PageUp:  # page up
             self.z = max(0, min(self.z + 1, 21))
-        elif key == "16777235": # up
-            self.longitude = max(-180.0, min(180.0, self.longitude + 0.0))
-            self.latitude = max(-85.0, min(85.0, self.latitude + 0.0003 * (22 - self.z)))
-        elif key == "16777234": # left
-            self.longitude = max(-180.0, min(180.0, self.longitude - 0.0003 * (22 - self.z)))
-            self.latitude = max(-85.0, min(85.0, self.latitude + 0.0))
-        elif key == "16777237": # down
-            self.longitude = max(-180.0, min(180.0, self.longitude + 0.0))
-            self.latitude = max(-85.0, min(85.0, self.latitude - 0.0003 * (22 - self.z)))
-        elif key == "16777236": # right
-            self.longitude = max(-180.0, min(180.0, self.longitude + 0.0003 * (22 - self.z)))
-            self.latitude = max(-85.0, min(85.0, self.latitude + 0.0))
+        elif key == Qt.Key.Key_Up:
+            self.latitude = max(-85.0, min(85.0, self.latitude + 0.0001 * (22 - self.z)))
+        elif key == Qt.Key.Key_Left:
+            self.longitude = max(-180.0, min(180.0, self.longitude - 0.0001 * (22 - self.z)))
+        elif key == Qt.Key.Key_Down:
+            self.latitude = max(-85.0, min(85.0, self.latitude - 0.0001 * (22 - self.z)))
+        elif key == Qt.Key.Key_Right:
+            self.longitude = max(-180.0, min(180.0, self.longitude + 0.0001 * (22 - self.z)))
 
-        self.marker = None  # Сброс метки при ручном перемещении
+        self.marker = None
         self.update_map()
 
     def update_map(self):
