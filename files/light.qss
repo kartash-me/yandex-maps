@@ -1,5 +1,6 @@
 QWidget {
     background-color: #fcfcf7;
+    color: #293345;
 }
 
 QPushButton {
@@ -11,12 +12,12 @@ QPushButton#light {
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
     border-right: 0px solid transparent;
-    background-color: #fcfcf7;
+    background-color: #293345;
 }
 
 QPushButton#dark {
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
     border-left: 0px solid transparent;
-    background-color: #293345;
+    background-color: #fcfcf7;
 }

@@ -12,8 +12,8 @@ from PyQt6.QtWidgets import QApplication, QMainWindow
 class Map(QMainWindow):
     def __init__(self):
         super().__init__(None)
-        self.longitude = 37.620070
-        self.latitude = 55.753630
+        self.longitude = 37.619881
+        self.latitude = 55.753674
         self.z = 20
         self.theme = "light"
 
@@ -29,15 +29,11 @@ class Map(QMainWindow):
         self.setWindowTitle("Yandex Maps API")
         self.setFixedSize(800, 450)
 
-        self.light.setIcon(QIcon("files/light.png"))
-        self.light.setIconSize(QSize(50, 50))
-        self.light.clicked.connect(self.change_theme)
-        self.light.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-
-        self.dark.setIcon(QIcon("files/dark.png"))
-        self.dark.setIconSize(QSize(45, 45))
-        self.dark.clicked.connect(self.change_theme)
-        self.dark.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        for btn in (self.light, self.dark):
+            btn.setIcon(QIcon(f"files/{btn.objectName()}.png"))
+            btn.setIconSize(QSize(45, 45))
+            btn.clicked.connect(self.change_theme)
+            btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
     def show_map(self):
         if os.path.isfile("map.png"):
@@ -88,7 +84,10 @@ def except_hook(cls, exception, traceback):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon("files/logo.png"))
+
     yandex_map = Map()
     yandex_map.show()
+
     sys.excepthook = except_hook
     sys.exit(app.exec())
