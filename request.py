@@ -6,8 +6,14 @@ from io import BytesIO
 from PIL import Image
 
 
-def get_api_key():
-    key = os.environ.get("STATIC_MAPS_KEY")
+def get_api_key(service_number:int) -> str:
+    service_keys = {
+        1: "STATIC_MAPS_KEY",
+        2: "GEOCODE_API_KEY"
+    }
+
+    key_name = service_keys[service_number]
+    key = os.environ.get(key_name)
 
     if key is None:
         if os.path.exists(".env"):
@@ -25,10 +31,11 @@ def get_api_key():
     return key
 
 
-API_KEY = get_api_key()
+API_KEY = get_api_key(1)
+Geocode_api_key = get_api_key(2)
 
 
-def get_map(z, longitude, latitude, theme):
+def get_map(z, longitude, latitude, theme, pt=None):
     server = "https://static-maps.yandex.ru/v1"
     params = {
         "apikey": API_KEY,
@@ -36,11 +43,45 @@ def get_map(z, longitude, latitude, theme):
         "z": str(z),
         "theme": theme
     }
+    if pt:
+        params["pt"] = f"{pt[0]},{pt[1]},pm2rdm"
+
     response = requests.get(server, params=params)
 
     if response.ok:
         im = BytesIO(response.content)
-        opened_image = Image.open(im)
-        opened_image.save("map.png")
+        Image.open(im).save("map.png")
 
     return response.ok
+
+
+def geocode(query):
+    geocoder_server = "https://geocode-maps.yandex.ru/1.x/"
+    params = {
+        "apikey": Geocode_api_key,
+        "geocode": query,
+        "format": "json",
+        "lang": "ru_RU"
+    }
+
+    try:
+        response = requests.get(geocoder_server, params=params)
+        response.raise_for_status()
+
+        data = response.json()
+        features = data['response']['GeoObjectCollection']['featureMember']
+
+        if not features:
+            return None, None, None
+
+        top_result = features[0]['GeoObject']
+        pos = top_result['Point']['pos']
+        longitude, latitude = map(float, pos.split())
+
+        address = top_result['metaDataProperty']['GeocoderMetaData']['text']
+
+        return longitude, latitude, address
+
+    except Exception as e:
+        print(f"Ошибка геокодирования: {e}")
+        return None, None, None
