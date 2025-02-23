@@ -93,11 +93,10 @@ class Map(QMainWindow):
         elif key == Qt.Key.Key_Right:
             self.longitude = max(-180.0, min(180.0, self.longitude + 0.0001 * (22 - self.z)))
 
-        self.marker = None
         self.update_map()
 
     def update_map(self):
-        if get_map(self.z, self.longitude, self.latitude, self.theme, self.marker):
+        if get_map(self.z, self.longitude, self.latitude, self.theme, pt=self.marker):
             self.show_map()
         else:
             self.label.setText("ИНВАЛИД РЕКВЕСТ")

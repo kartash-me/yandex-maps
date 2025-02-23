@@ -43,6 +43,7 @@ def get_map(z, longitude, latitude, theme, pt=None):
         "z": str(z),
         "theme": theme
     }
+
     if pt:
         params["pt"] = f"{pt[0]},{pt[1]},pm2rdm"
 
