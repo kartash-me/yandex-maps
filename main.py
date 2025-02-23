@@ -29,6 +29,7 @@ class Map(QMainWindow):
         self.setWindowTitle("Yandex Maps API")
         self.setFixedSize(800, 450)
         self.search_button.clicked.connect(self.search_object)
+        self.reset_button.clicked.connect(self.reset_object)
         self.search_req.returnPressed.connect(self.search_object)
         self.search_req.installEventFilter(self)
 
@@ -105,6 +106,13 @@ class Map(QMainWindow):
         self.theme = self.sender().objectName()
         self.setStyleSheet(self.qss.get(self.theme))
         self.update_map()
+
+    def reset_object(self):
+        if self.marker:
+            self.marker = None
+            self.update_map()
+        else:
+            self.statusBar().showMessage("На карте нету маркера")
 
 
 def except_hook(cls, exception, traceback):
