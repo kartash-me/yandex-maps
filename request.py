@@ -6,7 +6,7 @@ from io import BytesIO
 from PIL import Image
 
 
-def get_api_key(service_number:int) -> str:
+def get_api_key(service_number):
     service_keys = {
         1: "STATIC_MAPS_KEY",
         2: "GEOCODE_API_KEY"
