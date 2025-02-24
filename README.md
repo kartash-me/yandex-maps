@@ -17,10 +17,13 @@ pip3 install -r requirements.txt
 ## Настройка переменных окружения
 Скопируйте файл `template.env` в `.env`:
 ```bash
-cp config.env .env
+cp template.env .env
 ```
-Если посчитаете нужным, замените общедоступный API-ключ на свой.
-Подробнее о том, как это сделать, можно прочитать [тут](https://yandex.ru/maps-api/docs/static-api/quickstart.html).
+Если посчитаете нужным, замените общедоступные API-ключи на свои:
++ Подробнее о том, как получить ключ для `Yandex Maps Static API`, можно прочитать
+[тут](https://yandex.ru/maps-api/docs/static-api/quickstart.html)
++ Подробнее о том, как получить ключ для `Yandex Maps JavaScript API и HTTP Геокодер`, можно прочитать
+[тут](https://yandex.ru/maps-api/docs/geocoder-api/quickstart.html)
 
 ## Настройка параметров приложения
 Если посчитаете нужным, измените параметры в методе `__init__` класса `Map` в файле `main.py` 

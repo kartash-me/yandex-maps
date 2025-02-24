@@ -3,12 +3,26 @@ QWidget {
     color: #fcfcf7;
 }
 
-QPushButton {
-    border: 1px solid #fcfcf7;
+QLineEdit {
+    border: 2px solid #fcfcf7;
     background-color: transparent;
+    font-size: 12pt;
+    border-radius: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+QPushButton {
+    border: 2px solid #293345;
+    background-color: #fcfcf7;
+    color: #293345;
+    font-size: 12pt;
+    border-radius: 20px;
 }
 
 QPushButton#light {
+    border: 1px solid #fcfcf7;
+    border-radius: 0px;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
     border-right: 0px solid transparent;
@@ -16,8 +30,13 @@ QPushButton#light {
 }
 
 QPushButton#dark {
+    border: 1px solid #fcfcf7;
+    border-radius: 0px;
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
     border-left: 0px solid transparent;
-    background-color: #fcfcf7;
+}
+
+QTextEdit {
+    border: 0px solid transparent;
 }

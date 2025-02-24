@@ -1,6 +1,7 @@
+import os
 import sys
 
-from request import *
+from request import get_map, geocode
 
 from PyQt6 import uic
 from PyQt6.QtCore import QSize, Qt, QEvent
@@ -27,7 +28,8 @@ class Map(QMainWindow):
         uic.loadUi("files/ui.ui", self)
         self.setStyleSheet(self.qss.get(self.theme))
         self.setWindowTitle("Yandex Maps API")
-        self.setFixedSize(800, 450)
+        self.setFixedSize(800, 470)
+
         self.search_button.clicked.connect(self.search_object)
         self.search_result.setReadOnly(True)
         self.search_result.setLineWrapMode(QTextEdit.LineWrapMode.WidgetWidth)
@@ -55,6 +57,7 @@ class Map(QMainWindow):
 
     def search_object(self):
         query = self.search_req.text().strip()
+
         if not query:
             self.statusBar().showMessage("Введите запрос")
             return
@@ -73,20 +76,12 @@ class Map(QMainWindow):
         self.update_map()
         self.search_result.setText(address)
 
-    def show_map(self):
-        if os.path.isfile("map.png"):
-            image = QPixmap("map.png")
-            self.label.setPixmap(image)
-            os.remove("map.png")
-        else:
-            self.label.setText("ИНВАЛИД РЕКВЕСТ")
-
     def keyPressEvent(self, event):
         key = event.key()
 
-        if key == Qt.Key.Key_PageDown:  # page down
+        if key == Qt.Key.Key_PageDown:
             self.z = max(0, min(self.z - 1, 21))
-        elif key == Qt.Key.Key_PageUp:  # page up
+        elif key == Qt.Key.Key_PageUp:
             self.z = max(0, min(self.z + 1, 21))
         elif key == Qt.Key.Key_Up:
             self.latitude = max(-85.0, min(85.0, self.latitude + 0.0001 * (22 - self.z)))
@@ -100,10 +95,11 @@ class Map(QMainWindow):
         self.update_map()
 
     def update_map(self):
-        if get_map(self.z, self.longitude, self.latitude, self.theme, pt=self.marker):
-            self.show_map()
+        if get_map(self.z, self.longitude, self.latitude, self.theme, self.marker) and os.path.exists("map.png"):
+            self.label.setPixmap(QPixmap("map.png"))
+            os.remove("map.png")
         else:
-            self.label.setText("ИНВАЛИД РЕКВЕСТ")
+            self.statusBar().showMessage("Ошибка получения карты")
 
     def change_theme(self):
         self.theme = self.sender().objectName()

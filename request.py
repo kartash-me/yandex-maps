@@ -6,13 +6,7 @@ from io import BytesIO
 from PIL import Image
 
 
-def get_api_key(service_number):
-    service_keys = {
-        1: "STATIC_MAPS_KEY",
-        2: "GEOCODE_API_KEY"
-    }
-
-    key_name = service_keys[service_number]
+def get_api_key(key_name):
     key = os.environ.get(key_name)
 
     if key is None:
@@ -23,7 +17,7 @@ def get_api_key(service_number):
         else:
             raise KeyError("Файл .env не найден")
 
-        key = os.environ.get("STATIC_MAPS_KEY")
+        key = os.environ.get(key_name)
 
         if key is None:
             raise KeyError("API-ключ не найден")
@@ -31,14 +25,14 @@ def get_api_key(service_number):
     return key
 
 
-API_KEY = get_api_key(1)
-Geocode_api_key = get_api_key(2)
+STATIC_MAPS_KEY = get_api_key("STATIC_MAPS_KEY")
+GEOCODE_API_KEY = get_api_key("GEOCODE_API_KEY")
 
 
-def get_map(z, longitude, latitude, theme, pt=None):
+def get_map(z, longitude, latitude, theme, pt):
     server = "https://static-maps.yandex.ru/v1"
     params = {
-        "apikey": API_KEY,
+        "apikey": STATIC_MAPS_KEY,
         "ll": f"{longitude},{latitude}",
         "z": str(z),
         "theme": theme
@@ -59,7 +53,7 @@ def get_map(z, longitude, latitude, theme, pt=None):
 def geocode(query):
     geocoder_server = "https://geocode-maps.yandex.ru/1.x/"
     params = {
-        "apikey": Geocode_api_key,
+        "apikey": GEOCODE_API_KEY,
         "geocode": query,
         "format": "json",
         "lang": "ru_RU"
@@ -70,16 +64,16 @@ def geocode(query):
         response.raise_for_status()
 
         data = response.json()
-        features = data['response']['GeoObjectCollection']['featureMember']
+        features = data["response"]["GeoObjectCollection"]["featureMember"]
 
         if not features:
             return None, None, None
 
-        top_result = features[0]['GeoObject']
-        pos = top_result['Point']['pos']
+        top_result = features[0]["GeoObject"]
+        pos = top_result["Point"]["pos"]
         longitude, latitude = map(float, pos.split())
 
-        address = top_result['metaDataProperty']['GeocoderMetaData']['text']
+        address = top_result["metaDataProperty"]["GeocoderMetaData"]["text"]
 
         return longitude, latitude, address
 

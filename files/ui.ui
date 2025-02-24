@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>791</width>
-    <height>450</height>
+    <width>800</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -71,7 +71,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Тема приложения:</string>
+     <string>Тема приложения</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -80,10 +80,10 @@
    <widget class="QPushButton" name="search_button">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>140</y>
-      <width>81</width>
-      <height>32</height>
+      <x>10</x>
+      <y>190</y>
+      <width>91</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -93,34 +93,102 @@
    <widget class="QLineEdit" name="search_req">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>110</y>
-      <width>113</width>
-      <height>21</height>
+      <x>10</x>
+      <y>140</y>
+      <width>181</width>
+      <height>41</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="reset_button">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>180</y>
-      <width>180</width>
-      <height>32</height>
+      <x>100</x>
+      <y>190</y>
+      <width>91</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Сброс поискового результата</string>
+     <string>Сброс</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>181</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="theme_label_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>110</y>
+      <width>141</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Поиск</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QTextEdit" name="search_result">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>220</y>
+      <y>270</y>
       <width>180</width>
-      <height>80</height>
+      <height>191</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="theme_label_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>240</y>
+      <width>141</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Результаты поиска</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>230</y>
+      <width>181</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
   </widget>
