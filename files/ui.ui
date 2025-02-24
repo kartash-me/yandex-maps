@@ -113,6 +113,16 @@
      <string>Сброс поискового результата</string>
     </property>
    </widget>
+   <widget class="QTextEdit" name="search_result">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>220</y>
+      <width>180</width>
+      <height>80</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

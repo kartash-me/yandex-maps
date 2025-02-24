@@ -5,7 +5,7 @@ from request import *
 from PyQt6 import uic
 from PyQt6.QtCore import QSize, Qt, QEvent
 from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import QApplication, QMainWindow, QTextEdit
 
 
 class Map(QMainWindow):
@@ -29,6 +29,8 @@ class Map(QMainWindow):
         self.setWindowTitle("Yandex Maps API")
         self.setFixedSize(800, 450)
         self.search_button.clicked.connect(self.search_object)
+        self.search_result.setReadOnly(True)
+        self.search_result.setLineWrapMode(QTextEdit.LineWrapMode.WidgetWidth)
         self.reset_button.clicked.connect(self.reset_object)
         self.search_req.returnPressed.connect(self.search_object)
         self.search_req.installEventFilter(self)
@@ -69,6 +71,7 @@ class Map(QMainWindow):
 
         self.statusBar().showMessage(f"Найдено: {address}")
         self.update_map()
+        self.search_result.setText(address)
 
     def show_map(self):
         if os.path.isfile("map.png"):
@@ -111,6 +114,7 @@ class Map(QMainWindow):
         if self.marker:
             self.marker = None
             self.update_map()
+            self.search_result.setText("")
         else:
             self.statusBar().showMessage("На карте нету маркера")
 
