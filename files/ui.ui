@@ -81,7 +81,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>190</y>
+      <y>220</y>
       <width>91</width>
       <height>41</height>
      </rect>
@@ -94,7 +94,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>140</y>
+      <y>170</y>
       <width>181</width>
       <height>41</height>
      </rect>
@@ -104,7 +104,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>190</y>
+      <y>220</y>
       <width>91</width>
       <height>41</height>
      </rect>
@@ -151,9 +151,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>270</y>
+      <y>300</y>
       <width>180</width>
-      <height>191</height>
+      <height>140</height>
      </rect>
     </property>
    </widget>
@@ -161,7 +161,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>240</y>
+      <y>270</y>
       <width>141</width>
       <height>21</height>
      </rect>
@@ -182,13 +182,29 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>230</y>
+      <y>260</y>
       <width>181</width>
       <height>16</height>
      </rect>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="index_checkbox">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>140</y>
+      <width>120</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text">
+     <string>Почтовый индекс</string>
     </property>
    </widget>
   </widget>

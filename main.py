@@ -57,12 +57,13 @@ class Map(QMainWindow):
 
     def search_object(self):
         query = self.search_req.text().strip()
+        self.search_req.setText("")
 
         if not query:
             self.statusBar().showMessage("Введите запрос")
             return
 
-        longitude, latitude, address = geocode(query)
+        longitude, latitude, address, postal_code = geocode(query)
 
         if None in (longitude, latitude, address):
             self.statusBar().showMessage("Объект не найден")
@@ -74,7 +75,10 @@ class Map(QMainWindow):
 
         self.statusBar().showMessage(f"Найдено: {address}")
         self.update_map()
-        self.search_result.setText(address)
+        if self.index_checkbox.isChecked():
+            self.search_result.setText(f"{address} Почтовый индекс: {"нету" if not postal_code else postal_code}")
+        else:
+            self.search_result.setText(f"{address}")
 
     def keyPressEvent(self, event):
         key = event.key()

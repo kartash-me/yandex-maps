@@ -65,9 +65,14 @@ def geocode(query):
 
         data = response.json()
         features = data["response"]["GeoObjectCollection"]["featureMember"]
+        try:
+            postal_code = data['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty'][
+                'GeocoderMetaData']['Address']['postal_code']
+        except (KeyError, IndexError):
+            postal_code = None
 
         if not features:
-            return None, None, None
+            return None, None, None, None
 
         top_result = features[0]["GeoObject"]
         pos = top_result["Point"]["pos"]
@@ -75,8 +80,8 @@ def geocode(query):
 
         address = top_result["metaDataProperty"]["GeocoderMetaData"]["text"]
 
-        return longitude, latitude, address
+        return longitude, latitude, address, postal_code
 
     except Exception as e:
         print(f"Ошибка геокодирования: {e}")
-        return None, None, None
+        return None, None, None, None
