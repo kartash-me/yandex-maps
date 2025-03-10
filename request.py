@@ -39,9 +39,9 @@ def get_map(z, longitude, latitude, theme, pt):
     }
 
     if pt:
-        params["pt"] = f"{pt[0]},{pt[1]},pm2rdm"
+        params["pt"] = "{},{},pm2rdm".format(*pt)
 
-    response = requests.get(server, params=params)
+    response = requests.get(server, params)
 
     if response.ok:
         im = BytesIO(response.content)
@@ -51,7 +51,7 @@ def get_map(z, longitude, latitude, theme, pt):
 
 
 def geocode(query):
-    geocoder_server = "https://geocode-maps.yandex.ru/1.x/"
+    server = "https://geocode-maps.yandex.ru/1.x/"
     params = {
         "apikey": GEOCODE_API_KEY,
         "geocode": query,
@@ -60,14 +60,14 @@ def geocode(query):
     }
 
     try:
-        response = requests.get(geocoder_server, params=params)
+        response = requests.get(server, params)
         response.raise_for_status()
 
         data = response.json()
         features = data["response"]["GeoObjectCollection"]["featureMember"]
+
         try:
-            postal_code = data['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty'][
-                'GeocoderMetaData']['Address']['postal_code']
+            postal_code = features[0]["GeoObject"]["metaDataProperty"]["GeocoderMetaData"]["Address"]["postal_code"]
         except (KeyError, IndexError):
             postal_code = None
 
@@ -77,7 +77,6 @@ def geocode(query):
         top_result = features[0]["GeoObject"]
         pos = top_result["Point"]["pos"]
         longitude, latitude = map(float, pos.split())
-
         address = top_result["metaDataProperty"]["GeocoderMetaData"]["text"]
 
         return longitude, latitude, address, postal_code

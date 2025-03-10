@@ -40,3 +40,12 @@ QPushButton#dark {
 QTextEdit {
     border: 0px solid transparent;
 }
+
+QCheckBox::indicator {
+    border: 1px solid #293345;
+    border-radius: 5px;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #293345;
+}

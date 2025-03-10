@@ -1,12 +1,12 @@
 import os
 import sys
 
-from request import get_map, geocode
-
 from PyQt6 import uic
-from PyQt6.QtCore import QSize, Qt, QEvent
+from PyQt6.QtCore import QEvent, QSize, Qt
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTextEdit
+
+from request import geocode, get_map
 
 
 class Map(QMainWindow):
@@ -16,7 +16,7 @@ class Map(QMainWindow):
         self.latitude = 55.753674
         self.z = 20
         self.theme = "light"
-        self.marker = None
+        self.marker = self.index = self.address = None
 
         with open("files/light.qss") as light, open("files/dark.qss") as dark:
             self.qss = {"light": light.read(), "dark": dark.read()}
@@ -33,6 +33,7 @@ class Map(QMainWindow):
         self.search_button.clicked.connect(self.search_object)
         self.search_result.setReadOnly(True)
         self.search_result.setLineWrapMode(QTextEdit.LineWrapMode.WidgetWidth)
+        self.index_checkbox.stateChanged.connect(self.show_address)
         self.reset_button.clicked.connect(self.reset_object)
         self.search_req.returnPressed.connect(self.search_object)
         self.search_req.installEventFilter(self)
@@ -63,22 +64,16 @@ class Map(QMainWindow):
             self.statusBar().showMessage("Введите запрос")
             return
 
-        longitude, latitude, address, postal_code = geocode(query)
+        longitude, latitude, address, self.index = geocode(query)
 
         if None in (longitude, latitude, address):
             self.statusBar().showMessage("Объект не найден")
             return
 
-        self.longitude = longitude
-        self.latitude = latitude
-        self.marker = (longitude, latitude)
-
-        self.statusBar().showMessage(f"Найдено: {address}")
+        self.marker = self.longitude, self.latitude = longitude, latitude
+        self.address = address
+        self.show_address()
         self.update_map()
-        if self.index_checkbox.isChecked():
-            self.search_result.setText(f"{address} Почтовый индекс: {"нету" if not postal_code else postal_code}")
-        else:
-            self.search_result.setText(f"{address}")
 
     def keyPressEvent(self, event):
         key = event.key()
@@ -110,13 +105,26 @@ class Map(QMainWindow):
         self.setStyleSheet(self.qss.get(self.theme))
         self.update_map()
 
+    def show_address(self):
+        self.statusBar().showMessage("")
+
+        if self.address:
+            if self.index_checkbox.isChecked():
+                if self.index:
+                    self.search_result.setText(f"{self.index}, {self.address}")
+                else:
+                    self.search_result.setText(self.address)
+                    self.statusBar().showMessage("Индекс не найден")
+            else:
+                self.search_result.setText(self.address)
+
     def reset_object(self):
         if self.marker:
-            self.marker = None
+            self.marker = self.index = self.address = None
             self.update_map()
             self.search_result.setText("")
         else:
-            self.statusBar().showMessage("На карте нету маркера")
+            self.statusBar().showMessage("На карте нет маркера")
 
 
 def except_hook(cls, exception, traceback):
